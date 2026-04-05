@@ -67,7 +67,7 @@ function OrbitingPlanet({ angle, distance, size, color, label, animSpeed }) {
     <motion.div
       style={{
         position: 'absolute',
-        top: '50%', left: '50%',
+        top: '47%', left: '47%',
         width: size, height: size,
       }}
       animate={{ rotate: 360 }}
@@ -107,15 +107,14 @@ export default function Skills() {
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
   const orbitData = [
-    { distance: 90, size: 48, color: '#00d4ff', label: 'Python', animSpeed: 12 },
-    { distance: 130, size: 42, color: '#7b2fff', label: 'TF', animSpeed: 18 },
-    { distance: 160, size: 36, color: '#00ffcc', label: 'CV', animSpeed: 22 },
-    { distance: 110, size: 40, color: '#ff2d8d', label: 'Flask', animSpeed: 15 },
-    { distance: 75, size: 32, color: '#ffaa00', label: 'JS', animSpeed: 9 },
-    { distance: 145, size: 38, color: '#a0e4ff', label: 'Git', animSpeed: 25 },
-  ]
-
-  return (
+    { distance: 80, size: 29, color: '#ffaa00', label: 'JS', animSpeed: 9 },
+    { distance: 110, size: 48, color: '#00d4ff', label: 'Python', animSpeed: 12 },
+    { distance: 152, size: 40, color: '#ff2d8d', label: 'Flask', animSpeed: 15 },
+    { distance: 180, size: 42, color: '#7b2fff', label: 'TF', animSpeed: 18 },
+    { distance: 205, size: 38, color: '#a0e4ff', label: 'Git', animSpeed: 25 },
+    { distance: 236, size: 36, color: '#00ffcc', label: 'CV', animSpeed: 22 },
+  ];
+  return (  
     <section id="skills" className="section" ref={ref} style={{ padding: '8rem 0' }}>
       <div className="content-layer" style={{
         maxWidth: '1200px',
@@ -133,14 +132,14 @@ export default function Skills() {
           transition={{ duration: 1 }}
           style={{
             position: 'relative',
-            height: '420px',
+            height: '600px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}
         >
           {/* Orbit rings */}
-          {[75, 110, 130, 145, 160].map((r, i) => (
+          {[75, 100, 140, 165, 190, 225].map((r, i) => (
             <div key={r} style={{
               position: 'absolute',
               width: r * 2 + 'px', height: r * 2 + 'px',

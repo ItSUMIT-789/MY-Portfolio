@@ -1,155 +1,114 @@
 import { useRef, useState } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 
 // ─── Temporary JSON data (replace with backend API later) ───────────────────
-const testimonialsData = [
+const initialTestimonials = [
   {
     id: 1,
-    name: 'Rahul Mehta',
-    role: 'Senior Engineer',
-    company: 'Live Coder',
+    name: 'Abhay Sonone',
     avatar: 'RM',
     avatarColor: '#00d4ff',
-    relation: 'Internship Mentor',
-    text: 'Sumit demonstrated exceptional problem-solving ability during his internship. He picked up new concepts faster than most developers I\'ve mentored. His work on workflow automation was genuinely impressive for someone at that stage.',
-    rating: 5,
-    date: 'Aug 2024',
+    text: 'Nice work ethic and a quick learner. Sumit\'s project on Sign Language Translation was one of the best in our CS50 class. He went beyond the basics to implement a real-time demo, which was impressive for a first-year student.',
   },
   {
     id: 2,
-    name: 'Priya Desai',
-    role: 'Professor, Computer Engineering',
-    company: 'Vidyalankar Institute of Technology',
+    name: 'Harsh Aachrekar',
     avatar: 'PD',
     avatarColor: '#7b2fff',
-    relation: 'Faculty Guide',
     text: 'One of the most self-driven students I\'ve taught. Sumit\'s Sign Language Translator project stood out in our department showcase — technically solid, well-documented, and solving a real-world accessibility problem.',
-    rating: 5,
-    date: 'Dec 2024',
   },
   {
     id: 3,
-    name: 'Arjun Nair',
-    role: 'Full Stack Developer',
-    company: 'Freelance',
+    name: 'Niraj Bhoir',
     avatar: 'AN',
     avatarColor: '#00ffcc',
-    relation: 'Peer Collaborator',
-    text: 'Collaborated with Sumit on a hackathon project. His understanding of computer vision is way beyond his year. He debugged an OpenCV pipeline issue in minutes that had us stuck for hours. A reliable teammate.',
-    rating: 5,
-    date: 'Mar 2025',
+    text: 'Best Performance',
   },
   {
     id: 4,
-    name: 'Sneha Patil',
-    role: 'ML Engineer',
-    company: 'TechStartup, Mumbai',
+    name: 'Diksha Ghanghav',
     avatar: 'SP',
     avatarColor: '#ff2d8d',
-    relation: 'Workshop Instructor',
-    text: 'Sumit attended my ML workshop and was consistently the most engaged participant. He asked questions that even intermediate developers struggle to articulate. His PaintVision project shows real creative application of computer vision.',
-    rating: 5,
-    date: 'Jan 2025',
+    text: 'Nice! Portfolio',
   },
 ]
 
-// ─── Star rating component ───────────────────────────────────────────────────
-function Stars({ count, color }) {
-  return (
-    <div style={{ display: 'flex', gap: '3px' }}>
-      {[...Array(5)].map((_, i) => (
-        <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <path
-            d="M6 1l1.2 3.6H11L8.1 6.9l1.1 3.4L6 8.4l-3.2 1.9 1.1-3.4L1 4.6h3.8L6 1z"
-            fill={i < count ? color : 'rgba(255,255,255,0.1)'}
-          />
-        </svg>
-      ))}
-    </div>
-  )
-}
-
 // ─── Single card ─────────────────────────────────────────────────────────────
-function TestimonialCard({ t, index, isInView, isActive, onClick }) {
+function TestimonialCard({ t, index, isInView }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50, scale: 0.92 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ delay: index * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      onClick={onClick}
       style={{
-        cursor: 'pointer',
-        background: isActive
-          ? `linear-gradient(145deg, ${t.avatarColor}0d 0%, rgba(0,5,25,0.8) 100%)`
-          : 'rgba(0,5,20,0.55)',
-        border: `1px solid ${isActive ? t.avatarColor + '55' : 'rgba(0,212,255,0.1)'}`,
-        borderRadius: '20px',
-        padding: '1.8rem',
+        cursor: 'default',
+        background: '#081225',
+        border: '1px solid rgba(0, 212, 255, 0.24)',
+        borderRadius: '28px',
+        padding: '2rem 1.8rem 1.8rem',
         backdropFilter: 'blur(20px)',
         transition: 'all 0.4s ease',
-        boxShadow: isActive ? `0 8px 40px ${t.avatarColor}22, 0 0 0 1px ${t.avatarColor}22` : 'none',
+        boxShadow: '0 16px 40px rgba(0, 0, 0, 0.35)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Glow corner on active */}
-      {isActive && (
-        <div style={{
-          position: 'absolute', top: 0, right: 0,
-          width: '120px', height: '120px',
-          background: `radial-gradient(circle at 100% 0%, ${t.avatarColor}18 0%, transparent 70%)`,
-          pointerEvents: 'none',
-        }} />
-      )}
+      <div style={{
+        position: 'absolute',
+        top: '0.9rem',
+        left: '1rem',
+        width: '110px',
+        height: '110px',
+        borderRadius: '50%',
+        background: `radial-gradient(circle, ${t.avatarColor}15 0%, transparent 70%)`,
+        pointerEvents: 'none',
+        filter: 'blur(2px)',
+      }} />
 
-      {/* Quote mark */}
       <div style={{
         fontFamily: 'Georgia, serif',
-        fontSize: '4rem',
-        lineHeight: 0.6,
-        color: `${t.avatarColor}25`,
-        marginBottom: '0.8rem',
+        fontSize: '4.8rem',
+        lineHeight: 0.55,
+        color: `${t.avatarColor}30`,
+        marginBottom: '1.6rem',
         userSelect: 'none',
+        position: 'relative',
+        zIndex: 1,
       }}>
-        "
+        “
       </div>
 
-      {/* Text */}
       <p style={{
-        color: 'var(--text-secondary)',
-        fontSize: '0.88rem',
-        lineHeight: 1.85,
-        marginBottom: '1.4rem',
+        color: '#98a5bc',
+        fontSize: '1.18rem',
+        lineHeight: 1.9,
+        marginBottom: '4rem',
         fontStyle: 'italic',
+        position: 'relative',
+        zIndex: 1,
       }}>
         {t.text}
       </p>
 
-      {/* Rating */}
-      <div style={{ marginBottom: '1.2rem' }}>
-        <Stars count={t.rating} color={t.avatarColor} />
-      </div>
-
-      {/* Divider */}
       <div style={{
         height: '1px',
-        background: `linear-gradient(90deg, ${t.avatarColor}30, transparent)`,
-        marginBottom: '1.2rem',
+        background: 'rgba(255,255,255,0.08)',
+        marginBottom: '1.3rem',
+        position: 'relative',
+        zIndex: 1,
       }} />
 
-      {/* Author row */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
-        {/* Avatar */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', zIndex: 1 }}>
         <div style={{
-          width: '42px', height: '42px', borderRadius: '50%', flexShrink: 0,
-          background: `radial-gradient(circle at 35% 35%, ${t.avatarColor}cc, ${t.avatarColor}44)`,
-          border: `1px solid ${t.avatarColor}55`,
-          boxShadow: `0 0 12px ${t.avatarColor}44`,
+          width: '56px', height: '56px', borderRadius: '50%', flexShrink: 0,
+          background: 'transparent',
+          border: `1px solid ${t.avatarColor}88`,
+          boxShadow: `0 0 0 1px ${t.avatarColor}22, inset 0 0 18px ${t.avatarColor}22`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: 'var(--font-display)',
-          fontWeight: 700, fontSize: '0.7rem',
-          color: '#fff',
-          letterSpacing: '0.05em',
+          fontWeight: 700, fontSize: '0.95rem',
+          color: t.avatarColor,
+          letterSpacing: '0.06em',
         }}>
           {t.avatar}
         </div>
@@ -157,50 +116,14 @@ function TestimonialCard({ t, index, isInView, isActive, onClick }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '0.82rem',
+            fontSize: '1.05rem',
             fontWeight: 700,
             color: 'var(--text-primary)',
-            marginBottom: '0.15rem',
+            letterSpacing: '0.01em',
           }}>
             {t.name}
           </div>
-          <div style={{
-            fontSize: '0.75rem',
-            color: 'var(--text-secondary)',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}>
-            {t.role} · {t.company}
-          </div>
         </div>
-
-        {/* Relation badge */}
-        <div style={{
-          fontSize: '0.58rem',
-          padding: '3px 9px',
-          borderRadius: '20px',
-          background: `${t.avatarColor}12`,
-          border: `1px solid ${t.avatarColor}35`,
-          color: t.avatarColor,
-          fontFamily: 'var(--font-display)',
-          letterSpacing: '0.08em',
-          whiteSpace: 'nowrap',
-          flexShrink: 0,
-        }}>
-          {t.relation}
-        </div>
-      </div>
-
-      {/* Date chip */}
-      <div style={{
-        position: 'absolute', top: '1.2rem', right: '1.2rem',
-        fontSize: '0.6rem',
-        color: 'rgba(0,212,255,0.4)',
-        fontFamily: 'var(--font-display)',
-        letterSpacing: '0.1em',
-      }}>
-        {t.date}
       </div>
     </motion.div>
   )
@@ -210,9 +133,47 @@ function TestimonialCard({ t, index, isInView, isActive, onClick }) {
 export default function Testimonials() {
   const ref = useRef()
   const isInView = useInView(ref, { once: true, margin: '-80px' })
-  const [activeId, setActiveId] = useState(null)
+  const [showAll, setShowAll] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [name, setName] = useState('')
+  const [message, setMessage] = useState('')
+  const [testimonials, setTestimonials] = useState(initialTestimonials)
 
-  const toggle = (id) => setActiveId(prev => (prev === id ? null : id))
+  const displayedTestimonials = showAll ? testimonials : testimonials.slice(0, 3)
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const trimmedName = name.trim()
+    const trimmedMessage = message.trim()
+
+    if (!trimmedName || !trimmedMessage) {
+      return
+    }
+
+    const initials = trimmedName
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0].toUpperCase())
+      .join('')
+
+    setTestimonials((prev) => [
+      {
+        id: Date.now(),
+        name: trimmedName,
+        avatar: initials || 'NA',
+        avatarColor: '#00d4ff',
+        text: trimmedMessage,
+      },
+      ...prev,
+    ])
+
+    setName('')
+    setMessage('')
+    setShowForm(false)
+    setShowAll(true)
+  }
 
   return (
     <section
@@ -282,29 +243,8 @@ export default function Testimonials() {
             Words from mentors, colleagues & collaborators across the galaxy
           </motion.p>
 
-          {/* Backend notice badge */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.35 }}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginTop: '1.2rem',
-              padding: '0.3rem 1rem',
-              background: 'rgba(255,170,0,0.06)',
-              border: '1px solid rgba(255,170,0,0.2)',
-              borderRadius: '30px',
-              fontSize: '0.65rem',
-              color: 'rgba(255,170,0,0.7)',
-              fontFamily: 'var(--font-display)',
-              letterSpacing: '0.12em',
-            }}
-          >
-            <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#ffaa00', animation: 'blink 2s infinite' }} />
-            LIVE BACKEND COMING SOON · DEMO DATA
-          </motion.div>
+          
+          
         </div>
 
         {/* Cards grid */}
@@ -313,62 +253,155 @@ export default function Testimonials() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '1.5rem',
         }}>
-          {testimonialsData.map((t, i) => (
+          {displayedTestimonials.map((t, i) => (
             <TestimonialCard
               key={t.id}
               t={t}
               index={i}
               isInView={isInView}
-              isActive={activeId === t.id}
-              onClick={() => toggle(t.id)}
             />
           ))}
         </div>
 
-        {/* Summary strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8 }}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '4rem',
-            marginTop: '4rem',
-            paddingTop: '2.5rem',
-            borderTop: '1px solid rgba(0,212,255,0.1)',
-            flexWrap: 'wrap',
-          }}
-        >
-          {[
-            { value: `${testimonialsData.length}`, label: 'Testimonials', color: '#00d4ff' },
-            { value: '5.0', label: 'Avg Rating', color: '#ffaa00' },
-            { value: '3', label: 'Institutions', color: '#7b2fff' },
-            { value: '100%', label: 'Recommended', color: '#00ffcc' },
-          ].map(stat => (
-            <div key={stat.label} style={{ textAlign: 'center' }}>
-              <div style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '1.8rem',
-                fontWeight: 900,
-                color: stat.color,
-                textShadow: `0 0 20px ${stat.color}`,
-                lineHeight: 1,
-                marginBottom: '0.4rem',
-              }}>
-                {stat.value}
-              </div>
-              <div style={{
-                fontSize: '0.65rem',
-                color: 'var(--text-secondary)',
-                letterSpacing: '0.15em',
-                fontFamily: 'var(--font-display)',
-              }}>
-                {stat.label}
-              </div>
+        <div style={{
+          marginTop: '2rem',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '1rem',
+          flexWrap: 'wrap',
+        }}>
+          <button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            style={{
+              padding: '0.75rem 1.4rem',
+              borderRadius: '999px',
+              border: '1px solid rgba(0, 212, 255, 0.5)',
+              background: showAll ? 'rgba(0, 212, 255, 0.16)' : 'rgba(0, 212, 255, 0.08)',
+              color: '#d4ebff',
+              fontFamily: 'var(--font-display)',
+              fontSize: '0.75rem',
+              letterSpacing: '0.08em',
+              cursor: 'pointer',
+            }}
+          >
+            {showAll ? 'Show Top Three' : 'View All Testimonials'}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowForm((prev) => !prev)}
+            style={{
+              padding: '0.75rem 1.4rem',
+              borderRadius: '999px',
+              border: '1px solid rgba(123, 47, 255, 0.45)',
+              background: showForm ? 'rgba(123, 47, 255, 0.2)' : 'rgba(123, 47, 255, 0.1)',
+              color: '#e4d7ff',
+              fontFamily: 'var(--font-display)',
+              fontSize: '0.75rem',
+              letterSpacing: '0.08em',
+              cursor: 'pointer',
+            }}
+          >
+            Share Your Experience
+          </button>
+        </div>
+
+        {showForm && (
+          <motion.form
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            style={{
+              marginTop: '2rem',
+              maxWidth: '760px',
+              marginInline: 'auto',
+              padding: '2rem',
+              borderRadius: '26px',
+              background: 'linear-gradient(135deg, rgba(4,14,40,0.94), rgba(2,10,30,0.98))',
+              border: '1px solid rgba(0, 212, 255, 0.26)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.35)',
+            }}
+          >
+            <h3 style={{
+              textAlign: 'center',
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-display)',
+              fontSize: '2rem',
+              marginBottom: '0.6rem',
+            }}>
+              Leave a Testimonial
+            </h3>
+
+            <p style={{
+              textAlign: 'center',
+              color: 'var(--text-secondary)',
+              marginBottom: '1.8rem',
+            }}>
+              Share your experience working with me.
+            </p>
+
+            <input
+              type="text"
+              placeholder="Your Name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '1rem 1.2rem',
+                borderRadius: '14px',
+                border: '1px solid rgba(255,255,255,0.12)',
+                background: 'rgba(255,255,255,0.04)',
+                color: 'var(--text-primary)',
+                fontSize: '1.05rem',
+                marginBottom: '1rem',
+                outline: 'none',
+              }}
+            />
+
+            <textarea
+              placeholder="Write your testimonial..."
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              required
+              rows={6}
+              style={{
+                width: '100%',
+                padding: '1rem 1.2rem',
+                borderRadius: '14px',
+                border: '1px solid rgba(255,255,255,0.12)',
+                background: 'rgba(255,255,255,0.04)',
+                color: 'var(--text-primary)',
+                fontSize: '1.05rem',
+                marginBottom: '1.5rem',
+                resize: 'vertical',
+                outline: 'none',
+              }}
+            />
+
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <button
+                type="submit"
+                style={{
+                  padding: '0.9rem 2rem',
+                  borderRadius: '999px',
+                  border: '1px solid rgba(123, 47, 255, 0.7)',
+                  background: 'linear-gradient(90deg, rgba(0,212,255,0.18), rgba(123,47,255,0.24))',
+                  color: '#eaf4ff',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '0.9rem',
+                  letterSpacing: '0.05em',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                Submit Testimonial
+              </button>
             </div>
-          ))}
-        </motion.div>
+          </motion.form>
+        )}
       </div>
 
       <style>{`

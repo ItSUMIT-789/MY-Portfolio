@@ -212,7 +212,7 @@ export default function Hero() {
         >
           <span style={{ fontFamily: 'var(--font-display)', fontSize: '0.6rem', letterSpacing: '0.3em', color: 'var(--text-secondary)' }}>EXPLORE</span>
           <div style={{
-            width: '1px', height: '50px',
+            width: '1px', height: '70px',
             background: 'linear-gradient(to bottom,rgba(0,212,255,0.8),transparent)',
             animation: 'float 2s ease-in-out infinite'
           }} />

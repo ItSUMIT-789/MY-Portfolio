@@ -353,8 +353,8 @@ export default function Contact() {
             SUMIT SHIDOLE
           </div>
           <div>Built with React · Three.js · Framer Motion</div>
-          <div style={{ marginTop: '0.5rem' }}>
-            {portfolioData.languages.join(' · ')} · Mumbai, India
+          <div style={{ marginTop: '0.8rem', fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+            © 2026 Sumit Shidole. All rights reserved.
           </div>
         </motion.div>
       </div>
