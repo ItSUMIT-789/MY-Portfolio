@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { portfolioData } from '../utils/data'
 
@@ -32,6 +32,14 @@ function AnimatedTitle({ text }) {
 
 export default function Hero() {
   const scanRef = useRef()
+  const [imageLoadFailed, setImageLoadFailed] = useState(false)
+  const profileImage = portfolioData.profileImage || '/profile.jpeg'
+  const initials = portfolioData.name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join('')
 
   useEffect(() => {
     if (scanRef.current) scanRef.current.style.animation = 'scanline 4s linear infinite'
@@ -76,16 +84,107 @@ export default function Hero() {
         maxWidth: '900px',
         marginTop: '6rem'
       }}>
-        {/* Orbit decoration */}
+        {/* Profile visual */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
-          style={{ position: 'relative', display: 'inline-block', marginBottom: '2rem' }}
+          style={{
+            position: 'relative',
+            display: 'inline-flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1rem',
+            marginBottom: '2rem'
+          }}
         >
-          <div style={{ width: '120px', height: '120px', borderRadius: '50%', border: '1px solid rgba(0,212,255,0.3)', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', animation: 'float 6s ease-in-out infinite' }} />
-          <div style={{ width: '160px', height: '160px', borderRadius: '50%', border: '1px dashed rgba(0,212,255,0.15)', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
-          <div style={{ width: '60px', height: '60px', background: 'radial-gradient(circle,rgba(0,212,255,0.8) 0%,rgba(0,212,255,0.1) 70%)', borderRadius: '50%', margin: '50px auto', boxShadow: '0 0 40px rgba(0,212,255,0.6),0 0 80px rgba(0,212,255,0.3)' }} />
+          <div style={{
+            position: 'relative',
+            width: 'min(76vw, 310px)',
+            aspectRatio: '1 / 1',
+            borderRadius: '50%',
+            padding: '9px',
+            border: '2px solid rgba(0, 212, 255, 0.65)',
+            boxShadow: '0 0 40px rgba(0, 212, 255, 0.3), inset 0 0 45px rgba(0, 212, 255, 0.18)',
+            background: 'radial-gradient(circle at 30% 20%, rgba(0, 212, 255, 0.2), rgba(0, 8, 24, 0.95) 62%)'
+          }}>
+            <div style={{
+              position: 'absolute',
+              inset: '-16px',
+              borderRadius: '50%',
+              border: '1px solid rgba(0, 212, 255, 0.22)',
+              pointerEvents: 'none'
+            }} />
+            <div style={{
+              position: 'absolute',
+              inset: '-30px',
+              borderRadius: '50%',
+              border: '1px dashed rgba(0, 212, 255, 0.12)',
+              pointerEvents: 'none'
+            }} />
+
+            <div style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: '50%',
+              overflow: 'hidden',
+              background: 'linear-gradient(155deg, rgba(12, 36, 85, 0.95), rgba(14, 12, 56, 0.95))',
+              display: 'grid',
+              placeItems: 'center'
+            }}>
+              {!imageLoadFailed ? (
+                <img
+                  src={profileImage}
+                  alt={portfolioData.name}
+                  onError={() => setImageLoadFailed(true)}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              ) : (
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'grid',
+                  placeItems: 'center',
+                  color: '#eaf4ff',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(2.6rem, 6vw, 4rem)',
+                  letterSpacing: '0.08em',
+                  background: 'radial-gradient(circle at 50% 20%, rgba(123, 47, 255, 0.35), rgba(4, 15, 41, 0.95) 70%)'
+                }}>
+                  {initials}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.7rem',
+            padding: '0.7rem 1.8rem',
+            borderRadius: '999px',
+            border: '1px solid rgba(0, 212, 255, 0.38)',
+            background: 'rgba(0, 11, 30, 0.78)',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3), inset 0 0 18px rgba(0, 212, 255, 0.1)',
+            backdropFilter: 'blur(12px)'
+          }}>
+            <span style={{
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              background: '#1fe871',
+              boxShadow: '0 0 12px rgba(31, 232, 113, 0.9)'
+            }} />
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              color: 'var(--electric-blue)',
+              fontSize: 'clamp(0.8rem, 2.2vw, 1.05rem)',
+              letterSpacing: '0.04em',
+              fontWeight: 700
+            }}>
+              Open to work
+            </span>
+          </div>
         </motion.div>
 
         {/* Tag */}
