@@ -1,6 +1,7 @@
 export const portfolioData = {
   name: "Sumit Shidole",
   title: "Software Developer",
+  profileImage: '/MY-Portfolio/profile.jpeg',
   tagline: "Building intelligent systems at the intersection of vision & code",
   bio: "Computer Engineering student (B.E. 2028) with a passion for real-time computer vision and machine learning. I build end-to-end ML systems that solve real problems — from gesture recognition to intelligent applications.",
   location: "Chembur, Mumbai 400017",

@@ -152,7 +152,7 @@ export default function Nav() {
         {/* Right: Resume + hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
           <a
-            href="/resume.pdf"
+            href={`${import.meta.env.BASE_URL}sumit-shidole resume.pdf`}
             download="Sumit_Shidole_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
@@ -228,7 +228,7 @@ export default function Nav() {
               </a>
             ))}
             <a
-              href="/resume.pdf"
+              href={`${import.meta.env.BASE_URL}sumit-shidole resume.pdf`}
               download="Sumit_Shidole_Resume.pdf"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
@@ -239,7 +239,7 @@ export default function Nav() {
                 letterSpacing: '0.15em', textDecoration: 'none', alignSelf: 'flex-start',
               }}
             >
-              ↓ RÉSUMÉ
+              ↓ RESUME
             </a>
           </motion.div>
         )}

@@ -33,7 +33,7 @@ function AnimatedTitle({ text }) {
 export default function Hero() {
   const scanRef = useRef()
   const [imageLoadFailed, setImageLoadFailed] = useState(false)
-  const profileImage = portfolioData.profileImage || '/profile.jpeg'
+  const profileImage = portfolioData.profileImage
   const initials = portfolioData.name
     .split(' ')
     .filter(Boolean)
@@ -100,7 +100,7 @@ export default function Hero() {
         >
           <div style={{
             position: 'relative',
-            width: 'min(76vw, 310px)',
+            width: 'min(65vw, 280px)',
             aspectRatio: '1 / 1',
             borderRadius: '50%',
             padding: '9px',
