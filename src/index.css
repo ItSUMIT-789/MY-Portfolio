@@ -1,0 +1,207 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --space-black: #00000f;
+  --deep-space: #020213;
+  --nebula-blue: #0a0a2e;
+  --electric-blue: #00d4ff;
+  --plasma-cyan: #00ffcc;
+  --star-white: #e8f4ff;
+  --cosmic-purple: #7b2fff;
+  --nebula-pink: #ff2d8d;
+  --planet-glow: rgba(0, 212, 255, 0.15);
+  --text-primary: #e8f4ff;
+  --text-secondary: rgba(232, 244, 255, 0.65);
+  --font-display: 'Orbitron', monospace;
+  --font-body: 'Exo 2', sans-serif;
+}
+
+/*
+  KEY: html/body scroll freely — native scroll drives the Three.js camera
+  via window.addEventListener('scroll'). Do NOT set overflow:hidden here.
+*/
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--space-black);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Three.js canvas — fixed behind everything, never receives pointer events */
+canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Custom cursor */
+.cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--electric-blue);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+  mix-blend-mode: screen;
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(0, 212, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: all 0.15s ease;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--space-black); }
+::-webkit-scrollbar-thumb { background: var(--electric-blue); border-radius: 2px; }
+
+::selection { background: rgba(0, 212, 255, 0.3); color: white; }
+
+/* ── Sections — normal document flow, stack vertically ─────────────────── */
+.section {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Nav */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 15, 0.4);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.2rem; font-weight: 700;
+  color: var(--electric-blue);
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.8rem; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  transition: color 0.3s ease;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--electric-blue); }
+
+/* Glow text */
+.glow-text {
+  text-shadow: 0 0 30px rgba(0,212,255,0.8), 0 0 60px rgba(0,212,255,0.4);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-20px); }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
+@keyframes scanline {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(100vh); }
+}
+
+/* Section typography */
+.section-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem; letter-spacing: 0.4em;
+  color: var(--electric-blue);
+  text-transform: uppercase;
+  margin-bottom: 1rem; opacity: 0.8;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900; line-height: 1.1;
+  background: linear-gradient(135deg, #fff 0%, var(--electric-blue) 50%, var(--plasma-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  padding: 2rem;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.glass-card:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  transform: translateY(-4px);
+}
+
+/*
+  .canvas-wrapper is no longer used — the <canvas> element itself
+  is styled via the canvas{} selector above (position:fixed).
+  Keeping this class for any legacy references.
+*/
+.canvas-wrapper {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Content layer — sits above the fixed canvas */
+.content-layer {
+  position: relative;
+  z-index: 10;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { gap: 1.5rem; }
+  .nav-links a { font-size: 0.65rem; }
+}
