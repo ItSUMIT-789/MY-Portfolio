@@ -12,7 +12,7 @@ const initialTestimonials = [
   },
   {
     id: 2,
-    name: 'Harsh Aachrekar',
+    name: 'Harsh Acharekar',
     avatar: 'HA',
     avatarColor: '#7b2fff',
     text: 'Working with Sumit is smooth and productive. He communicates well, shares ideas, and always supports the team',
