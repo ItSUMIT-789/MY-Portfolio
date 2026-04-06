@@ -24,13 +24,6 @@ const contactLinks = [
     icon: '</>',
     color: '#7b2fff'
   },
-  {
-    label: 'Phone',
-    value: portfolioData.phone,
-    href: `tel:${portfolioData.phone}`,
-    icon: '✆',
-    color: '#00ffcc'
-  },
 ]
 
 function ContactCard({ link, index, isInView }) {
