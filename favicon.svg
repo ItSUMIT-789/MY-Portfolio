@@ -1,0 +1,588 @@
+I have a React + Vite + Tailwind project called RailOne.
+
+Here is my package.json
+{
+  "name": "railway-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.13.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.24",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.4",
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^0.19.8"
+  }
+}
+
+
+Here is my vite.config.js
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import { VitePWA } from "vite-plugin-pwa"
+
+export default defineConfig({
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: "autoUpdate",
+      manifest: {
+        id: "/",
+        name: "RailOne",
+        short_name: "RailOne",
+        description: "Railway Ticket Booking Application",
+        start_url: "/",
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#1E63D5",
+      
+        icons: [
+          {
+            src: "/pwa-192.png",
+            sizes: "192x192",
+            type: "image/png"
+          },
+          {
+            src: "/pwa-512.png",
+            sizes: "512x512",
+            type: "image/png"
+          }
+        ],
+      
+        screenshots: [
+          {
+            src: "/screenshot-desktop.png",
+            sizes: "1919x977",
+            type: "image/png",
+            form_factor: "wide"
+          },
+          {
+            src: "/screenshot-mobile.png",
+            sizes: "[720]×[1600]",
+            type: "image/png"
+          }
+        ]
+      }
+    })
+  ]
+})
+
+Here is my index.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo1.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RailOne</title>
+    <script type="module" crossorigin src="/assets/index-qQuSohaD.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-dkJ4vHzA.css">
+  <link rel="manifest" href="/manifest.webmanifest"></head>
+  <body>
+    <div id="root"></div>
+
+  </body>
+</html>
+
+Here is my App.jsx
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import MyBookings from "./pages/MyBookings";
+import BookingDetails from "./pages/BookingDetails"; // 👈 ADD THIS
+import UnreservedBooking from "./pages/UnreservedBooking";
+import SearchStation from "./pages/SearchStation";
+import ConfirmBooking from "./pages/ConfirmBooking";
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/bookings" element={<MyBookings />} />
+      <Route path="/ticket/:id" element={<BookingDetails />} />
+      <Route path="/unreserved" element={<UnreservedBooking />} />
+      <Route path="/search-station" element={<SearchStation />} />
+      <Route path="/confirm-booking" element={<ConfirmBooking />} />
+    </Routes>
+  );
+}
+
+export default App;
+
+Here is my Home.jsx
+import reservedImg from "../assets/reserved.jpeg"
+import unreservedImg from "../assets/unreserved.jpeg"
+import platformImg from "../assets/platform.jpeg"
+import searchImg from "../assets/search.png"
+import pnrImg from "../assets/pnr.png"
+import coachImg from "../assets/coach.png"
+import trackImg from "../assets/track.png"
+import foodImg from "../assets/food.png"
+import refundImg from "../assets/refund.png"
+import madadImg from "../assets/madad.png"
+import wavesImg from "../assets/waves.png"
+import { FiBell } from "react-icons/fi";
+import { HiOutlineHome, HiHome } from "react-icons/hi";
+import { MdOutlineConfirmationNumber } from "react-icons/md";
+import { HiOutlineUser } from "react-icons/hi";
+import { HiOutlineMenu } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+/*---------------------------------------------------------------------------------*/
+
+const PAGE_BG = "#f2f4f8";
+
+const journeys = [
+  { date: "Fri, 20 Feb 26", from: "KURLA JN.", to: "VADALA ROAD", type: "Unreserved" },
+  { date: "Fri, 20 Feb 26", from: "ASANGAO", to: "MUMBAI CST", type: "Unreserved" },
+];
+
+function TicketCard({ journey, index }) {
+  const navigate = useNavigate();
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: 320,                 // Strict fixed width
+        flexShrink: 0,
+        scrollSnapAlign: "start",
+        overflow: "visible",
+      }}
+    >
+      {/* Card Body */}
+      <div
+        style={{
+          borderRadius: 24,
+          overflow: "hidden",
+          background:
+            "linear-gradient(130deg, #4a55c8 0%, #9b59d0 55%, #b06ed4 100%)",
+          padding: "20px 20px 18px 20px",
+        }}
+      >
+        {/* Date */}
+        <p
+          style={{
+            color: "rgba(255,255,255,0.82)",
+            fontSize: 14,
+            fontWeight: 300,
+            letterSpacing: "0.03em",
+            margin: "0 0 10px 0",
+          }}
+        >
+          {journey.date}
+        </p>
+
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.28)", marginBottom: 12 }} />
+
+        {/* Stations */}
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
+          <p style={{ color: "white", fontSize: 14, letterSpacing: "0.1em", fontWeight: 300, margin: 0 }}>
+            {journey.from}
+          </p>
+          <p style={{ color: "white", fontSize: 14, letterSpacing: "0.1em", fontWeight: 300, margin: 0 }}>
+            {journey.to}
+          </p>
+        </div>
+
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.28)", marginBottom: 14 }} />
+
+        {/* Bottom Row */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <p style={{ color: "#b6f2a3", fontSize: 18, fontWeight: 600, margin: 0 }}>
+            {journey.type}
+          </p>
+
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/ticket/${journey.id}`)
+              }}
+              style={{
+                padding: "6px 12px",
+                borderRadius: 999,
+                border: "1.5px solid rgba(255,255,255,0.65)",
+                background: "transparent",
+                color: "white",
+                fontSize: 12,
+                fontWeight: 300,
+                cursor: "pointer",
+              }}
+            >
+              Book Again
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/ticket/${journey.id}`)
+              }}
+              style={{
+                padding: "6px 12px",
+                borderRadius: 999,
+                border: "1.5px solid rgba(255,255,255,0.65)",
+                background: "transparent",
+                color: "white",
+                fontSize: 12,
+                fontWeight: 300,
+                cursor: "pointer",
+              }}
+            >
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Notch Cut */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          right: -9,
+          transform: "translateY(-50%)",
+          width: 18,
+          height: 18,
+          borderRadius: "50%",
+          backgroundColor: PAGE_BG,
+          zIndex: 5,
+        }}
+      />
+    </div>
+  );
+}
+
+/*---------------------------------------------------------------------------------*/
+
+function Home() {
+  const navigate = useNavigate();
+    const [journeys, setJourneys] = useState([]);
+
+useEffect(() => {
+  const storedBookings =
+    JSON.parse(localStorage.getItem("bookings")) || [];
+
+  const formatted = storedBookings.slice(0, 3).map((b) => ({
+    id: b.id,
+    date: new Date(b.bookingTime).toDateString(),
+    from: b.source?.name,
+    to: b.destination?.name,
+    type: "Unreserved",
+  }));
+
+  setJourneys(formatted);
+}, []);
+  return (
+    <div className="bg-[#f2f4f8] min-h-screen flex justify-center">
+      {/* Mobile Container */}
+      <div className="w-full max-w-sm bg-[#f2f4f8] pb-24">
+
+        {/* Header */}
+        <div className="flex justify-between items-center px-4 py-4">
+          <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-blue-600 font-bold">
+            Aअ
+          </div>
+
+          <h1 className="text-3xl tracking-wide flex items-end font-sans">
+            {/* Ra - thin & pure black */}
+            <span className="font-light text-black">Ra</span>
+
+            {/* i without default dot */}
+            <span className="relative font-medium text-gray-800">
+              <span className="relative">
+                i
+                {/* Custom Orange Dot */}
+                <span className="absolute top-1 left-0.5 w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
+              </span>
+            </span>
+
+            {/* lO medium */}
+            <span className="font-medium text-gray-800">lO</span>
+
+            {/* ne bold */}
+            <span className="font-bold text-black">ne</span>
+          </h1>
+
+          <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">
+            <FiBell className="text-blue-600" />
+          </div>
+        </div>
+
+        {/* Greeting */}
+        <div className="px-5 mt-2">
+          <p className="text-[#121a4c] text-sm font-medium">
+            Hi, Sumit Shidole!
+          </p>
+
+          <h2 className="text-lg font-bold text-[#121a4c] mt-2">
+            Journey Planner
+          </h2>
+        </div>
+
+        {/* Journey Cards */}
+        <div className="px-5 mt-3">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="text-center">
+              <img
+                src={reservedImg}
+                alt="Reserved"
+                className="w-full h-22 object-cover rounded-2xl"
+              />
+              <p className="mt-2 text-base text-[#3a3c4c]">
+                Reserved
+              </p>
+            </div>
+
+            <div 
+              className="text-center cursor-pointer"
+              onClick={() => navigate("/unreserved")}
+            >
+              <img
+                src={unreservedImg}
+                alt="Unreserved"
+                className="w-full h-22 object-cover rounded-2xl"
+              />
+              <p className="mt-2 text-base text-[#3a3c4c]">
+                Unreserved
+              </p>
+            </div>
+
+            <div className="text-center">
+              <img
+                src={platformImg}
+                alt="Platform"
+                className="w-full h-22 object-cover rounded-2xl"
+              />
+              <p className="mt-2 text-base text-[#3a3c4c]">
+                Platform
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* More Offerings */}
+        <div className="px-5 mt-4">
+          <h2 className="text-lg font-bold text-[#121a4c] mb-4">
+            More Offerings
+          </h2>
+
+          <div className="grid grid-cols-4 gap-5">
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-pink-100 overflow-hidden mb-1">
+                <img src={searchImg} alt="Search" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                Search<br />Trains
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-green-100 overflow-hidden mb-1">
+                <img src={pnrImg} alt="PNR" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                PNR<br />Status
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-blue-100 overflow-hidden mb-1">
+                <img src={coachImg} alt="Coach" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                Coach<br />Position
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-yellow-100 overflow-hidden mb-1">
+                <img src={trackImg} alt="Track" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                Track Your<br />Train
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-indigo-100 overflow-hidden mb-1">
+                <img src={foodImg} alt="Food" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                Order<br />Food
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-gray-200 overflow-hidden mb-1">
+                <img src={refundImg} alt="Refund" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                File<br />Refund
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-red-100 overflow-hidden mb-1">
+                <img src={madadImg} alt="Madad" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                Rail<br />Madad
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-18 h-16 mx-auto rounded-2xl bg-indigo-900 overflow-hidden mb-1">
+                <img src={wavesImg} alt="Waves" className="w-full h-full object-cover" />
+              </div>
+              <p className="text-sm text-[#1e2a78] leading-snug">
+                Go To<br />WAVES
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Upcoming Journey ── */}
+        <div style={{ marginTop: 40 }}>
+          <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1e2a78", marginBottom: 20, padding: "0 20px" }}>
+            Upcoming Journey
+          </h2>
+
+          <div
+            className="hide-scrollbar"
+            style={{
+              display: "flex",
+              gap: 16,
+              overflowX: "auto",
+              overflowY: "visible",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingBottom: 12,
+              scrollSnapType: "x mandatory",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            {journeys.map((journey, index) => (
+              <TicketCard
+                key={index}
+                journey={journey}
+                index={index}
+              />
+            ))}
+          </div>
+        </div>
+
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 max-w-sm mx-auto z-20">
+        {/* Blue Navigation Bar */}
+        <div className="bg-blue-600 flex justify-around items-center py-3 text-sm">
+          {/* Active - Home */}
+          <div
+            onClick={() => navigate("/")}
+            className="flex flex-col items-center text-white cursor-pointer"
+          >
+            <HiHome className="text-2xl mb-1" />
+            <span>Home</span>
+          </div>
+
+          {/* My Bookings */}
+          <div
+            onClick={() => navigate("/bookings")}
+            className="flex flex-col items-center text-white/70 cursor-pointer active:scale-95 transition"
+          >
+            <MdOutlineConfirmationNumber className="text-2xl mb-1" />
+            <span>My Bookings</span>
+          </div>
+
+          {/* You */}
+          <div className="flex flex-col items-center text-white/70">
+            <HiOutlineUser className="text-2xl mb-1" />
+            <span>You</span>
+          </div>
+
+          {/* Menu */}
+          <div className="flex flex-col items-center text-white/70">
+            <HiOutlineMenu className="text-2xl mb-1" />
+            <span>Menu</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+export default Home
+
+I already have a React + Vite + Tailwind CSS project called **RailOne**.
+
+The application is a **mobile-first railway app** with:
+
+* max-w-sm mobile layout
+* blue gradient theme
+* React Router navigation
+* fixed bottom navigation bar
+
+IMPORTANT:
+Do not change my existing UI or routing structure.
+Do not regenerate pages or layouts.
+Only add **Progressive Web App (PWA) install capability** to my existing project.
+
+I want to convert the project into an **installable Progressive Web App** so users can install it from the browser like a mobile application.
+
+Generate the complete implementation for my existing **Vite + React project** including:
+
+1. PWA setup using **vite-plugin-pwa**
+2. manifest.json configuration
+3. service worker configuration
+4. install prompt handling
+5. a custom **Install RailOne App** button component
+6. icons configuration (192x192 and 512x512)
+7. splash screen support
+8. offline caching for static assets
+9. proper configuration inside **vite.config.js**
+10. meta tags required in **index.html**
+
+Requirements:
+
+* Keep compatibility with React + Vite
+* Do not change my Tailwind layout
+* Keep mobile-first UI design
+* TypeScript only if optional
+* Ensure the app installs on **Android Chrome and desktop Chrome**
+* App must open in **standalone mode without browser UI**
+* Use theme color **#2563eb**
+* Keep the project name **RailOne**
+
+Also generate:
+
+* recommended folder structure
+* required npm packages
+* full code for **vite.config.js**
+* **manifest.json**
+* service worker configuration
+* install button component
+* steps to integrate the code into my existing project.
+
